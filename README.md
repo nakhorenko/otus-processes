@@ -392,3 +392,37 @@ lrwx------. 1 root root 64 Feb 14 10:03 /proc/944/fd/8 -> anon_inode:[eventpoll]
 lr-x------. 1 root root 64 Feb 14 10:03 /proc/944/fd/11 -> pipe:[17002]
 ```
 </details>
+
+
+А еще поиграть с реализацией 2 конкурирующих процессов по IO. пробовать запустить с разными ionice
+
+```
+[root@otusproc /]# time dd if=/dev/sda of=/dev/null & sleep 5
+[root@otusproc /]# time dd if=/dev/sda of=/dev/null &
+
+```
+[root@otusproc /]# ionice -c 1 -p 4134
+[root@otusproc /]# ionice -c 3 -p 4132
+
+[root@otusproc /]# ionice -p 4134
+realtime: prio 4
+[root@otusproc /]# ionice -p 4132
+idle
+```
+```
+[root@otusproc /]# 83886080+0 records in
+83886080+0 records out
+42949672960 bytes (43 GB) copied, 295.222 s, 145 MB/s
+
+real    4m55.224s
+user    0m15.279s
+sys     2m10.994s
+83886080+0 records in
+83886080+0 records out
+42949672960 bytes (43 GB) copied, 296.587 s, 145 MB/s
+
+real    4m56.633s
+user    0m15.650s
+sys     2m11.939s
+```
+Видно несущественную разницу в скорости выполнения процесса с повышенным приоритетом.
