@@ -7,6 +7,7 @@
 
 <details>
   <summary>Вывод</summary>
+  
 ```
 lrwx------. 1 root root 64 Feb 14 10:01 /proc/1/fd/0 -> /dev/null
 lrwx------. 1 root root 64 Feb 14 10:01 /proc/1/fd/1 -> /dev/null
